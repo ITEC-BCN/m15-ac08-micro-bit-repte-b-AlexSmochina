@@ -1,18 +1,26 @@
+inclinacion = 0
+tempo = 0
+
 def on_button_pressed_a():
-    music.play(music.string_playable("E B C5 A B G A F ", 120),
+    music.play(music.string_playable("G F G A - F E D ", 120),
         music.PlaybackMode.UNTIL_DONE)
 input.on_button_pressed(Button.A, on_button_pressed_a)
 
-def on_button_pressed_b():
-    global temp
-    temp = 120
-    led.plot_bar_graph(input.acceleration(Dimension.X), 1023)
-    music.play(music.string_playable("C F C5 A D B E G ", temp),
+def on_button_pressed_ab():
+    global inclinacion, tempo
+    # Obtener la inclinación y ajustar el tempo
+    inclinacion = input.rotation(Rotation.PITCH)
+    tempo = 120 * (inclinacion / 3)
+    music.set_tempo(tempo)
+    music.play(music.string_playable("G F G A - F E D ", tempo),
         music.PlaybackMode.UNTIL_DONE)
-    if inclinacion < 100:
-        pass
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def on_button_pressed_b():
+    music.play(music.string_playable("A B A B A B A B ", 120),
+        music.PlaybackMode.UNTIL_DONE)
 input.on_button_pressed(Button.B, on_button_pressed_b)
 
-temp = 0
-inclinacion = 0
-inclinacion = input.acceleration(Dimension.X)
+def on_forever():
+    pass
+basic.forever(on_forever)
